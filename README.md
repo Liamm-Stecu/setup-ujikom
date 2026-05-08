@@ -25,13 +25,13 @@ ssh user@IP_DEBIAN
 Contoh:
 
 ```bash
-ssh marcel@172.16.51.199
+ssh marcel@172.16.51.17
 ```
 
 Jika error SSH key:
 
 ```bash
-ssh-keygen -R 172.16.51.199
+ssh-keygen -R 172.16.51.17
 ```
 
 Lalu coba SSH ulang.
@@ -69,7 +69,7 @@ https://IP_DEBIAN:10000
 Contoh:
 
 ```txt
-https://172.16.51.199:10000
+https://172.16.51.17:10000
 ```
 
 ---
@@ -208,7 +208,7 @@ http://IP_DEBIAN:9090
 Contoh:
 
 ```txt
-http://172.16.51.199:9090
+http://172.16.51.17:9090
 ```
 
 ---
@@ -248,7 +248,7 @@ http://IP_DEBIAN:3000
 Contoh:
 
 ```txt
-http://172.16.51.199:3000
+http://172.16.51.17:3000
 ```
 
 ---
