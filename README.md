@@ -1,53 +1,266 @@
-# setup-ujikom
-langkah langkah setup ujikom
+# 🚀 Debian Server Setup Guide
 
-// 172.16.51.199 (access browser jeng bahan bahan na)
+> Bahan bahan wget: `172.16.51.199 atau 172.16.51.99`
 
--- setup user di Debian 
-adduser nama (buat user baru)
+---
 
--- ssh cmd
-ssh user@ip Debian (ssh via cmd windows)
-ssh-keygen -R (kalo error jalankan ini + ssh ulang)
+# 👤 Setup User Debian
 
--- setup webmin
-1. wget (install via link website)
-2. dpkg -i (unpackinh file)
-3. apt install -f (mun error)
-4. access browser ip Debian:10000
+Membuat user baru:
 
-- setup server
-1. apt install apache2 MariaDB-server php-fpm -y (install paket)
-2. a2enmod proxy_fcgi (aktifkan modul proxy)
-3. a2enconf php8.4-fpm (aktifkan modul php-fpm)
+```bash
+adduser nama_user
+```
 
--- setup ssl (meh bisa https)
-1. a2enmod ssl (aktifkan modul ssl)
-2. mkdir ssl (buat folder ssl)
-3. cd ssl (masuk ke folder ssl)
-4. openssl req -x509 -nodes -days 90 -newkey rsa:2048 -keyout self.key -out self.crt (setup key ssl)
-5. ls (cek isi directory yang kita masuki / cd, kalo ada file self.key dan self.crt berati di sana si key ssl nya)
-6. nano /etc/apache2/sites-available/000-default-ssl.conf (edit file ssl.conf)
-	- di 000_default-ssl.conf
-	cari dan edit ini sesuai directory dimana kita tadi setup key ssl (contoh karna tadi kita setup nya di file /root/ssl di no 3 dan 4)
-	    SSLCertificateFile /etc/apache2/ssl/selfsigned.crt     // ubah ke directory dimana kita setup key ssl (no 3 dan 4) /root/ssl/self.crt
-    	    SSLCertificateKeyFile /etc/apache2/ssl/selfsigned.key  // ubah ke direcroty dimana kita setup key ssl (no 3 dan 4) /root/ssl/self.key
+---
 
+# 🔐 SSH via CMD Windows
 
-7. a2ensite default-ssl.conf (aktifkan modul ssl.conf)
-8. systemctl reload apache2 (ngereload apache)
-	- Lamun error te bisa di reload
-	1. systemctl start apache2
+Login SSH:
 
--- setup prometheus
-1. apt install Prometheus prometheus-node-exporter (install paket)
-2. access browser ip debian:9090
+```bash
+ssh user@IP_DEBIAN
+```
 
--- setup Grafana
-1. wget (download Grafana via link)
-2. dpkg -i (unpacking Grafana)
-3. systemctl enable grafana-server (membolehkan Grafana aktif)
-4. systemctl restart Grafana-server  (merestart Grafana)
-5. access browser ip Debian:3000
+Contoh:
 
+```bash
+ssh marcel@172.16.51.199
+```
 
+Jika error SSH key:
+
+```bash
+ssh-keygen -R 172.16.51.199
+```
+
+Lalu coba SSH ulang.
+
+---
+
+# 🌐 Setup Webmin
+
+## 1. Download Webmin
+
+```bash
+wget LINK_WEBMIN
+```
+
+## 2. Install Package
+
+```bash
+dpkg -i nama_file.deb
+```
+
+## 3. Jika Dependency Error
+
+```bash
+apt install -f
+```
+
+## 4. Akses Webmin
+
+Buka browser:
+
+```txt
+https://IP_DEBIAN:10000
+```
+
+Contoh:
+
+```txt
+https://172.16.51.199:10000
+```
+
+---
+
+# 🖥️ Setup Apache + MariaDB + PHP-FPM
+
+## Install Package
+
+```bash
+apt install apache2 mariadb-server php-fpm -y
+```
+
+## Aktifkan Module Proxy
+
+```bash
+a2enmod proxy_fcgi
+```
+
+## Aktifkan PHP-FPM
+
+```bash
+a2enconf php8.4-fpm
+```
+
+## Restart Apache
+
+```bash
+systemctl restart apache2
+```
+
+---
+
+# 🔒 Setup SSL HTTPS Apache
+
+## Aktifkan Module SSL
+
+```bash
+a2enmod ssl
+```
+
+## Buat Folder SSL
+
+```bash
+mkdir ssl
+```
+
+## Masuk ke Folder SSL
+
+```bash
+cd ssl
+```
+
+## Generate SSL Key & Certificate
+
+```bash
+openssl req -x509 -nodes -days 90 -newkey rsa:2048 \
+-keyout self.key \
+-out self.crt
+```
+
+## Cek Isi Folder
+
+```bash
+ls
+```
+
+Pastikan ada file:
+
+```txt
+self.key
+self.crt
+```
+
+---
+
+# ⚙️ Konfigurasi SSL Apache
+
+Edit file SSL config:
+
+```bash
+nano /etc/apache2/sites-available/000-default-ssl.conf
+```
+
+Cari bagian ini:
+
+```apache
+SSLCertificateFile /etc/apache2/ssl/selfsigned.crt
+SSLCertificateKeyFile /etc/apache2/ssl/selfsigned.key
+```
+
+Ubah sesuai lokasi file SSL yang tadi dibuat.
+
+Contoh:
+
+```apache
+SSLCertificateFile /root/ssl/self.crt
+SSLCertificateKeyFile /root/ssl/self.key
+```
+
+---
+
+# ✅ Aktifkan SSL Site
+
+```bash
+a2ensite default-ssl.conf
+```
+
+Reload Apache:
+
+```bash
+systemctl reload apache2
+```
+
+Jika reload error:
+
+```bash
+systemctl start apache2
+```
+
+---
+
+# 📊 Setup Prometheus
+
+## Install Prometheus + Node Exporter
+
+```bash
+apt install prometheus prometheus-node-exporter -y
+```
+
+## Akses Prometheus
+
+```txt
+http://IP_DEBIAN:9090
+```
+
+Contoh:
+
+```txt
+http://172.16.51.199:9090
+```
+
+---
+
+# 📈 Setup Grafana
+
+## Download Grafana
+
+```bash
+wget LINK_GRAFANA
+```
+
+## Install Grafana
+
+```bash
+dpkg -i nama_file_grafana.deb
+```
+
+## Enable Grafana
+
+```bash
+systemctl enable grafana-server
+```
+
+## Restart Grafana
+
+```bash
+systemctl restart grafana-server
+```
+
+## Akses Grafana
+
+```txt
+http://IP_DEBIAN:3000
+```
+
+Contoh:
+
+```txt
+http://172.16.51.199:3000
+```
+
+---
+
+# 🛠️ Port Service
+
+| Service | Port |
+|----------|------|
+| Apache HTTP | 80 |
+| Apache HTTPS | 443 |
+| Webmin | 10000 |
+| Prometheus | 9090 |
+| Grafana | 3000 |
+
+---
